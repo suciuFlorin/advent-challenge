@@ -151,9 +151,92 @@ function printMatchingMap(data, table, isRev) {
     console.log("\n");
 }
 
+function isMatchingLetter(targetLetter, letterOne, letterTwo) {
+    const isMatchingOne = letterOne === targetLetter;
+    const isMatchingTwo = letterTwo === targetLetter;
+
+    return isMatchingOne && isMatchingTwo;
+}
+
+function searchAndFindWord(word, table) {
+    let matched = 0;
+    const [mWord, aWord, sWord] = word.split("");
+    let bufferArray = [];
+
+    table.forEach((row) => {
+        bufferArray.unshift(row);
+
+        if (bufferArray.length >= word.length) {
+            const lineOne = bufferArray[0];
+            const lineTwo = bufferArray[1];
+            const lineThree = bufferArray[2];
+
+            for (let j = 0; j < lineOne.length; j++) {
+                const firstTopCharacter = lineOne?.[j] || '';
+                const secondTopCharacter = lineOne?.[j + 2] || '';
+                const middleCharacter = lineTwo?.[j + 1] || '';
+                const firstBottomCharacter = lineThree?.[j] || '';
+                const secondBottomCharacter = lineThree?.[j + 2] || '';
+
+                // console.log(firstTopCharacter, ".", secondTopCharacter);
+                // console.log(".", middleCharacter, ".");
+                // console.log(firstBottomCharacter, ".", secondBottomCharacter);
+                // console.log("\n");
+
+                if (middleCharacter === aWord) {
+                    // S   S
+                    //   A
+                    // M   M
+                    if (isMatchingLetter(sWord, firstTopCharacter, secondTopCharacter)) {
+                        if (isMatchingLetter(mWord, firstBottomCharacter, secondBottomCharacter)) {
+                            matched++;
+                        }
+                    }
+
+                    // M   M
+                    //   A
+                    // S   S
+                    if (isMatchingLetter(mWord, firstTopCharacter, secondTopCharacter)) {
+                        if (isMatchingLetter(sWord, firstBottomCharacter, secondBottomCharacter)) {
+                            matched++;
+                        }
+                    }
+
+                    // S   M
+                    //   A
+                    // S   M
+                    if (isMatchingLetter(sWord, firstTopCharacter, firstBottomCharacter)) {
+                        if (isMatchingLetter(mWord, secondTopCharacter, secondBottomCharacter)) {
+                            matched++;
+                        }
+                    }
+
+                    // M   S
+                    //   A
+                    // M   S
+                    if (isMatchingLetter(mWord, firstTopCharacter, firstBottomCharacter)) {
+                        if (isMatchingLetter(sWord, secondTopCharacter, secondBottomCharacter)) {
+                            matched++;
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        if (bufferArray.length >word.length) {
+            bufferArray.pop();
+        }
+    })
+
+    return matched;
+}
+
 module.exports = {
     isMatchingWord,
     getWord,
     searchDiagonally,
-    printMatchingMap
+    printMatchingMap,
+    searchAndFindWord
 };
