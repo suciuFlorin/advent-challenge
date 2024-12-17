@@ -1,5 +1,5 @@
-function displayMap(x, y, table) {
-    const range = 3;
+function displayMap(x, y, direction, table) {
+    const range = 5;
     const outOfBounds = Array.from(Array(table[0].length).fill("#"));
     let topRow = (table?.[y - 1] || outOfBounds).join('');
     let row = (table?.[y] || outOfBounds).join("");
@@ -29,10 +29,11 @@ function displayMap(x, y, table) {
         bottomRow = bottomRow.slice(rowLength - range, range);
     }
 
-    console.clear();
+    // console.clear();
     console.log(topRow);
     console.log(row);
     console.log(bottomRow);
+    console.log({x, y, direction}, "\n");
 }
 
 module.exports = {
